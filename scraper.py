@@ -4,12 +4,14 @@ from bs4 import BeautifulSoup
 import re
 from io import BytesIO
 from zipfile import ZipFile
+from os.path  import basename
+
 web = "https://www.models-resource.com"
 link = web + "/3ds/pokemonxy/"
 #link_inicio = web + "/3ds/pokemonxy/model/9318/"
 #link_fin = web + "/3ds/pokemonxy/model/9318/"
 
-def descargar_y_descomprimir(enlace, destino='.'):
+def descargar_y_descomprimir_zip(enlace, destino='.'):
     http_response = urlopen(enlace)
     zipfile = ZipFile(BytesIO(http_response.read()))
     zipfile.extractall(path=destino)
@@ -55,13 +57,29 @@ secciones = soup.find_all("div", {"class": "updatesheeticons"})
 
 #def descargar_imagen():
 
+def descargar_imagen(enlace,nombre):
+
+    with open("imagenes/" + nombre + ".png" , "wb") as f:
+        f.write(requests.get(enlace).content)
+
+
 
 for i in range(0,1):
+
     pokemons = secciones[i].find_all("a")
+
     for pokemon in pokemons:
-        print(pokemon.get("href"))
+
         html_pokemon = obtener_html(web + pokemon.get("href"))
         datos = obtener_datos_pokemon(html_pokemon)
+
+        imagen =  pokemon.find("div", {"class": "iconbody"})
+        imagen = imagen.find("img").get("src")
+        datos["imagen"] = imagen
+
+        descargar_imagen(web+imagen, datos["codigo"])
+        descargar_y_descomprimir_zip(web + datos["zip"])
+
         print(datos)
     
 
