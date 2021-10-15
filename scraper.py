@@ -62,11 +62,10 @@ def descargar_imagen(enlace, nombre):
         f.write(requests.get(enlace).content)
 
 
-
 try:
     os.mkdir("imagenes")
 except OSError:
-    print ("Error al crear la carpeta imágenes")
+    print("Error al crear la carpeta imágenes")
     exit(1)
 
 
@@ -77,30 +76,32 @@ secciones = soup.find_all("div", {"class": "updatesheeticons"})
 fichero_datos = open("datosPokemons.csv", "w")
 fichero_datos.write("Código,Nombre,Tamaño,Sección" + os.linesep)
 
-for i in range(1,7):
+for i in range(1, 7):
 
     pokemons = secciones[i].find_all("a")
     total_pokemons = len(pokemons)
     num_pokemon = 0
     for pokemon in pokemons:
-        
+
         html_pokemon = obtener_html(web + pokemon.get("href"))
         datos = obtener_datos_pokemon(html_pokemon)
 
-        imagen =  pokemon.find("div", {"class": "iconbody"})
+        imagen = pokemon.find("div", {"class": "iconbody"})
         imagen = imagen.find("img").get("src")
         datos["imagen"] = imagen
 
         descargar_imagen(web+imagen, datos["codigo"])
         descargar_y_descomprimir_zip(web + datos["zip"])
 
-        csv_linea = datos["codigo"] + "," + datos["nombre"] + "," + datos["tamaño"] + "," + datos["seccion"]
+        csv_linea = datos["codigo"] + "," + datos["nombre"] + \
+            "," + datos["tamaño"] + "," + datos["seccion"]
         fichero_datos.write(csv_linea + os.linesep)
 
         num_pokemon += 1
-        print("Seccion: %s descargado elemento nº %d de %d"% (datos["seccion"], num_pokemon,total_pokemons))
+        print("Descargado %s perteneciente a la sección %s que es la %dº de 6 secciones  . Pokemon %dº de %d de esta sección " % (
+            datos["codigo"] + " " + datos["nombre"], datos["seccion"], i, num_pokemon, total_pokemons))
 
-  
+
 fichero_datos.close()
 
 
@@ -114,8 +115,6 @@ while parada:
     nuevo_link = web + datos["siguiente"]
     soup = obtener_html(web + datos["siguiente"])
 """
-    
-
 
 
 
