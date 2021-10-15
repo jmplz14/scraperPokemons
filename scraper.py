@@ -1,4 +1,5 @@
 import requests
+import urllib
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
 import re
@@ -13,10 +14,16 @@ link = web + "/3ds/pokemonxy/"
 # link_fin = web + "/3ds/pokemonxy/model/9318/"
 
 
-def descargar_y_descomprimir_zip(enlace, destino='.'):
-    http_response = urlopen(enlace)
-    zipfile = ZipFile(BytesIO(http_response.read()))
-    zipfile.extractall(path=destino)
+def descargar_zip(enlace,nombre, destino='.'):
+    #http_response = urlopen(enlace)
+    #zipfile = ZipFile(BytesIO(http_response.read()))
+    #zipfile.extractall(path=destino)
+    #r = requests.get(enlace)
+    r = requests.get(enlace, stream=True)
+    with open("archivosZips/" + nombre +".zip", 'wb') as fd:
+        for chunk in r.iter_content(chunk_size=128):
+            fd.write(chunk)
+
 
 
 def obtener_html(enlace):
@@ -61,12 +68,16 @@ def descargar_imagen(enlace, nombre):
     with open("imagenes/" + nombre + ".png", "wb") as f:
         f.write(requests.get(enlace).content)
 
+def crear_carpeta(nombre):
+    
+    try:
+        os.mkdir(nombre)
+    except OSError:
+        print("Error al crear la carpeta" + nombre)
+        exit(1)
 
-try:
-    os.mkdir("imagenes")
-except OSError:
-    print("Error al crear la carpeta imágenes")
-    exit(1)
+crear_carpeta("imagenes")
+crear_carpeta("archivosZips")
 
 
 soup = obtener_html(link)
@@ -91,14 +102,14 @@ for i in range(1, 7):
         datos["imagen"] = imagen
 
         descargar_imagen(web+imagen, datos["codigo"])
-        descargar_y_descomprimir_zip(web + datos["zip"])
+        descargar_zip(web + datos["zip"],datos["codigo"])
 
         csv_linea = datos["codigo"] + "," + datos["nombre"] + \
             "," + datos["tamaño"] + "," + datos["seccion"]
         fichero_datos.write(csv_linea + os.linesep)
 
         num_pokemon += 1
-        print("Descargado %s perteneciente a la sección %s que es la %dº de 6 secciones  . Pokemon %dº de %d de esta sección " % (
+        print("Descargado %s perteneciente a la sección %s que es la %dº de 6 secciones. Pokemon %dº de %d de esta sección " % (
             datos["codigo"] + " " + datos["nombre"], datos["seccion"], i, num_pokemon, total_pokemons))
 
 
