@@ -1,32 +1,35 @@
 # scraperPokemons
-Con la necesidad de obtener los ficheros zip que una pagina web nos brinda con los modelos 3d
-de los pokemons del juego pokemon X y pokemon Y, he creado un pequeño script python para obtener estos. 
+Con la necesidad de obtener los ficheros zip que una página web nos brinda con los modelos 3d
+de los pokemons del los juegos pokemon X y pokemon Y, he creado un pequeño script python para obtener estos ficheros. 
 
-La pagina utilizada para descargar los ficheros es <https://www.models-resource.com/3ds/pokemonxy/>. La página tiene los pokemons en
-distintas secciones segun su generacion y ademas tiene mas modelos del juego como pueden ser personajes. En nuestro caso solo nos interesan los pokemons.
+La página utilizada para descargar los ficheros es <https://www.models-resource.com/3ds/pokemonxy/>. Dicha página tiene los pokemons en
+distintas secciones según su generación y ademas tiene mas modelos del juego como pueden ser personajes. En nuestro caso solo nos interesan los pokemons.
 
-imagen
+![](imagenesDocumentacion/pagina.png)
 
-Recoremos todos los divs que contengan pokemon descargando la imagen de este pokemon y accediendo al link de la pagina de dicho pokemon. 
+Recorreremos todas las secciones que contengan pokemon descargando la imagen de este y accediendo al link de la página de dicho pokemon. 
 
-imagen
+Como se ve en la siguiente imagen la página tienen un enlace para descargar el zip del pokemon y alguna información de este. Nos quedaremos algunos campos de informacion como el nombre y codigo, la sección a la que petenece, el tamaño del zip
+y descargaremos el archivo zip con el enlace que viene al final de la tabla.
 
-como se ve en la imagen la pagina tienen un enlace para descargar el zip del pokemon y alguna informacion de este. Nos quedaremos algunos campos de informacion 
-y descargaremos el archivo zip.
+![](imagenesDocumentacion/pagina.png)
 
-Al ejecutar todo el script nos genera las carpetas imagenes y archivosZips ademas de un archivo csv con el nombre datosPokemons.csv.
+Al ejecutar todo el script nos genera las carpetas imágenes y archivosZips ademas de un archivo csv con el nombre datosPokemons.csv.
 
-En la carpeta imagenes tendremos las imagenes de portada de los poquemons con su codigo como nombre.
+En la carpeta imágenes tendremos las imágenes de portada de los pokemons con su código como nombre.
 
-Imagen
+![](imagenesDocumentacion/imagenes.png)
 
-En archivosZips de igual manera tendremos los archivos zips de cada pokemon que contienen los modelos 3d. Estos archivos tambien tendran como nombre
-el codigo del pokemon al que corresponde.
+En archivosZips de igual manera tendremos los archivos zips de cada pokemon. Estos archivos contienen los modelos 3d y serán nombrados también código del pokemon al que corresponde.
 
-Por ultimoe el archivo csv contendra el codigo y nombre del pokemon, el tamaño del fichero zip y la sección a la que pertenece.
+![](imagenesDocumentacion/zips.png)
 
-imagen
+Por ultimo el archivo csv contendrá el código y nombre del pokemon, el tamaño del fichero zip y la sección a la que pertenece.
 
-Al ejecutar el script nos dira por que seccion de todas la que tenemos vamos y cuantos pokemons de dicha seccion nos falta para terminar.
+![](imagenesDocumentacion/csv.png)
 
-imagen
+Al ejecutar el script nos dirá la sección por la que vamos de todas la que tenemos y cuantos pokemons de dicha sección nos falta para terminar.
+
+![](imagenesDocumentacion/ejecucion.png)
+
+Esto se ha realizado con la librería [Beautiful Soup](https://www.crummy.com/software/BeautifulSoup/bs4/doc/) de python que nos facilita mucho scrapear los datos de una web.
